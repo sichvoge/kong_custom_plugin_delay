@@ -61,7 +61,7 @@ function plugin:rewrite(plugin_conf)
 end --]]
 
 
-
+--[[
 -- runs in the 'access_by_lua_block'
 function plugin:access(plugin_conf)
 
@@ -77,8 +77,21 @@ function plugin:header_filter(plugin_conf)
 
   -- your custom code here, for example;
   kong.response.set_header(plugin_conf.response_header, "this is on the response")
+  delay(300)
 
 end --]]
+
+function delay(seconds)
+  ngx.update_time()
+  local now = ngx.time()
+  while true do
+    ngx.update_time()
+    local n = ngx.time()
+    if n - now > seconds then
+      break
+    end
+  end
+end
 
 
 --[[ runs in the 'body_filter_by_lua_block'
